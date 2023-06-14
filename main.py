@@ -16,7 +16,7 @@ table = PrettyTable()
 @cache_decorator
 @handle_empty_result
 def find_by_name(name: str):
-    author = Authors.objects(full_name=name.strip()).first()
+    author = Authors.objects(full_name__istartswith=name.strip()).first()
     if author:
         quotes = Quotes.objects(author=author)
         return quotes
@@ -26,7 +26,7 @@ def find_by_name(name: str):
 @cache_decorator
 @handle_empty_result
 def find_by_tag(tag: str):
-    quote = Quotes.objects(tags__in=[tag.strip()]).all()
+    quote = Quotes.objects(tags__istartswith=tag).all()
     if quote:
         return quote
 
@@ -36,7 +36,7 @@ def find_by_tag(tag: str):
 @handle_empty_result
 def find_by_tags(tags: str):
     tag_list = tags.strip().split(',')
-    quotes = Quotes.objects(tags__in=tag_list)
+    quotes = Quotes.objects(tags__in=tag_list).all()
     if quotes:
         return quotes
 
@@ -45,7 +45,7 @@ def find_by_tags(tags: str):
 @cache_decorator
 @handle_empty_result
 def find_by_quote(part_of_quote: str):
-    quotes = Quotes.objects(quote__contains=part_of_quote)
+    quotes = Quotes.objects(quote__icontains=part_of_quote).all()
     if quotes:
         return quotes
 
@@ -54,7 +54,7 @@ def find_by_quote(part_of_quote: str):
 @cache_decorator
 @handle_empty_result
 def find_by_place(place: str):
-    authors = Authors.objects(born_loc__contains=place)
+    authors = Authors.objects(born_loc__contains=place).all()
     if authors:
         quotes = Quotes.objects(author__in=authors)
         return quotes
