@@ -9,7 +9,16 @@ channel = rMQ_connect()
 channel.queue_declare(queue="SMS")
 
 
-def callback(ch, method, props, body):
+def callback_sms(ch, method, props, body):
+    """
+    Обробник повідомлення з черги "SMS".
+
+    :param ch: Канал зв'язку з RabbitMQ.
+    :param method: Інформація про метод передачі повідомлення.
+    :param props: Властивості повідомлення.
+    :param body: Тіло повідомлення.
+    :return: None
+    """
     uid_str = body.decode()
     user = User.objects.get(id=ObjectId(uid_str))
     if not user.sent:
@@ -22,7 +31,7 @@ def callback(ch, method, props, body):
 
 channel.basic_qos(prefetch_count=1)
 channel.queue_declare(queue='SMS')
-channel.basic_consume(queue="SMS", on_message_callback=callback)
+channel.basic_consume(queue="SMS", on_message_callback=callback_sms)
 
 if __name__ == "__main__":
     channel.start_consuming()

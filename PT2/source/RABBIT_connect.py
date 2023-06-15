@@ -1,3 +1,5 @@
+"""Підключення до RabbitMQ."""
+
 import pika
 
 

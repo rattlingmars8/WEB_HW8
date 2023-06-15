@@ -8,8 +8,7 @@ from mongoengine import connect
 import configparser
 from pathlib import Path
 
-
-config_ini = Path(__file__).parent.parent.joinpath("config.ini")
+config_ini = Path(__file__).parent.joinpath("config.ini")
 
 config = configparser.ConfigParser()
 config.read(config_ini)
